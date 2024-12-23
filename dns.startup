@@ -1,9 +1,7 @@
-#!/bin/bash
 ip link set dev eth0 up
 ip addr add 172.16.3.29/28 dev eth0
 ip route add default via 172.16.3.17
 
-# Règles DNS internes sur DNS
 iptables -P INPUT DROP
 iptables -P FORWARD DROP
 iptables -P OUTPUT DROP
@@ -18,11 +16,4 @@ iptables -A OUTPUT -p udp --sport 53 -j ACCEPT
 #Accepter les pings
 iptables -A INPUT -p icmp -j ACCEPT
 iptables -A OUTPUT -p icmp -j ACCEPT
-
-# Permettre le trafic traceroute sortant (UDP vers tout réseau interne)
-#iptables -A OUTPUT -d 172.16.0.0/12 -p udp -j ACCEPT
-
-# (Pour avoir le serveur DNS)  -> Internet (HTTP/HTTPS)
-iptables -A OUTPUT -p tcp --dport 80 -j ACCEPT
-iptables -A INPUT -p tcp --dport 443 -j ACCEPT
 

@@ -1,5 +1,3 @@
-#!/bin/bash
-# Configuration IP
 ip link set dev eth0 up
 ip addr add 172.16.21.254/24 dev eth0
 
@@ -32,7 +30,7 @@ iptables -A FORWARD -s 172.16.21.0/24 -o eth1 -p tcp --dport 443 -j ACCEPT
 
 # autoriser le trafic IMAPS depuis psoignant vers MAIL
 iptables -A FORWARD -s 172.16.24.0/22 -d 172.16.21.2 -p tcp --dport 993 -j ACCEPT
-iptables -A FORWARD -d 172.16.24.0/26 -s 172.16.21.2 -p tcp --sport 993 -j ACCEPT
+iptables -A FORWARD -d 172.16.24.0/22 -s 172.16.21.2 -p tcp --sport 993 -j ACCEPT
 # autoriser le trafic IMAPS depuis enseignants  vers MAIL
 iptables -A FORWARD -s 172.16.4.0/22 -d 172.16.21.2 -p tcp --dport 993 -j ACCEPT
 iptables -A FORWARD -d 172.16.4.0/22 -s 172.16.21.2 -p tcp --sport 993 -j ACCEPT
@@ -45,17 +43,18 @@ iptables -A FORWARD -d 172.16.12.0/22 -s 172.16.21.2 -p tcp --sport 993 -j ACCEP
 # autoriser le trafic IMAPS depuis etudiants vers MAIL
 iptables -A FORWARD -s 172.16.16.0/22 -d 172.16.21.2 -p tcp --dport 993 -j ACCEPT
 iptables -A FORWARD -d 172.16.16.0/22 -s 172.16.21.2 -p tcp --sport 993 -j ACCEPT
-# autoriser le trafic IMAPS depuis etudiants vers MAIL
-iptables -A FORWARD -s 172.16.20.0/22 -d 172.16.21.2 -p tcp --dport 993 -j ACCEPT
-iptables -A FORWARD -d 172.16.20.0/22 -s 172.16.21.2 -p tcp --sport 993 -j ACCEPT
-
-
-
+# autoriser le trafic IMAPS depuis compta vers MAIL
+iptables -A FORWARD -s 172.16.20.0/24 -d 172.16.21.2 -p tcp --dport 993 -j ACCEPT
+iptables -A FORWARD -d 172.16.20.0/24 -s 172.16.21.2 -p tcp --sport 993 -j ACCEPT
 
 # Autoriser l'accès SFTP (port 22) des chercheurs (172.16.8.0/22) vers BDD (172.16.21.3)
 # Chercheurs
 iptables -A FORWARD -s 172.16.8.0/22 -d 172.16.21.3 -p tcp --dport 22 -j ACCEPT
 iptables -A FORWARD -d 172.16.8.0/22 -s 172.16.21.3 -p tcp --sport 22 -j ACCEPT
+# EC
+iptables -A FORWARD -s 172.16.12.0/22 -d 172.16.21.3 -p tcp --dport 22 -j ACCEPT
+iptables -A FORWARD -d 172.16.12.0/22 -s 172.16.21.3 -p tcp --sport 22 -j ACCEPT
+
 
 # Autoriser le trafic MySQL entre S (172.16.3.28) et BDD (172.16.21.3)
 iptables -A FORWARD -s 172.16.3.28 -d 172.16.21.3 -p tcp --dport 3306 -j ACCEPT

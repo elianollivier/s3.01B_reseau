@@ -1,4 +1,3 @@
-#!/bin/bash
 ip link set dev eth0 up
 ip addr add 172.16.24.1/22 dev eth0
 
@@ -23,7 +22,7 @@ iptables -A FORWARD -d 172.16.24.0/22 -s 172.16.3.29 -p udp --sport 53 -j ACCEPT
 iptables -A FORWARD -s 172.16.24.0/24 -d 172.16.3.28 -p tcp --dport 1224 -j ACCEPT
 
 
-# Accès mail (MAIL:172.16.21.2). Supposons IMAPS (993)
+# Accès mail IMAPS (993)
 iptables -A FORWARD -s 172.16.24.0/22 -d 172.16.21.2 -p tcp --dport 993 -j ACCEPT
 
 # Accès Internet (HTTP/HTTPS) (Public & intranet sur s)
