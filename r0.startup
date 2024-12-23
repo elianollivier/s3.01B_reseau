@@ -1,0 +1,26 @@
+#!/bin/bash
+ip link set dev eth0 up
+ip addr add 10.0.0.1/24 dev eth0
+
+
+ip route add 172.16.21.0/24 via 10.0.0.7
+ip route add 172.16.3.16/28 via 10.0.0.9
+ip route add 192.168.0.0/24 via 10.0.0.5
+ip route add 172.16.22.0/26 via 10.0.0.8
+ip route add 172.16.4.0/22 via 10.0.0.3
+ip route add 172.16.8.0/22 via 10.0.0.10
+ip route add 172.16.12.0/22 via 10.0.0.11
+ip route add 172.16.16.0/22 via 10.0.0.4
+ip route add 172.16.20.0/24 via 10.0.0.6
+ip route add 172.16.24.0/22 via 10.0.0.2
+# Pas de politique restrictive sur R0 si on considère que c’est la sortie Internet.
+
+# Autoriser tout du LAN vers l'extérieur (à affiner si besoin)
+iptables -P INPUT ACCEPT
+iptables -P FORWARD ACCEPT
+iptables -P OUTPUT ACCEPT
+
+#echo "nameserver 8.8.8.8" > /etc/resolv.conf
+iptables -t nat -A POSTROUTING -o eth1 -j MASQUERADE
+
+

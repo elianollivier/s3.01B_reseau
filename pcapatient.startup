@@ -1,0 +1,7 @@
+#!/bin/bash
+ip a add 192.168.0.2/24 dev eth0
+ip link set dev eth0 up
+ip r add default via 192.168.0.1
+echo "nameserver 8.8.8.8" > /etc/resolv.conf
+#echo "nameserver 172.16.3.29" > /etc/resolv.conf
+

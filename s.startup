@@ -1,0 +1,6 @@
+#!/bin/bash
+ip link set dev eth0 up
+ip addr add 172.16.3.28/28 dev eth0
+ip route add default via 172.16.3.17
+echo "nameserver 172.16.3.29" > /etc/resolv.conf
+

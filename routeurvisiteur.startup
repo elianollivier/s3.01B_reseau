@@ -1,0 +1,31 @@
+#!/bin/bash
+ip a add 172.16.22.1/26 dev eth0
+ip link set dev eth0 up
+ip a add 10.0.0.8/24 dev eth1
+ip link set dev eth1 up
+ip r add default via 10.0.0.1
+
+iptables -P INPUT DROP
+iptables -P FORWARD DROP
+iptables -P OUTPUT DROP
+
+iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+iptables -A FORWARD -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+#Ping
+iptables -A FORWARD -d 172.16.22.0/26 -p icmp --icmp-type echo-request -j ACCEPT
+iptables -A FORWARD -s 172.16.22.0/26 -p icmp --icmp-type echo-reply -j ACCEPT
+
+# DNS
+iptables -A FORWARD -s 172.16.22.0/26 -d 172.16.3.29 -p udp --dport 53 -j ACCEPT
+iptables -A FORWARD -d 172.16.22.0/26 -s 172.16.3.29 -p udp --sport 53 -j ACCEPT
+
+# Web public sur S
+iptables -A FORWARD -s 172.16.22.0/26 -d 172.16.3.28 -p tcp --dport 80 -j ACCEPT
+iptables -A FORWARD -s 172.16.22.0/26 -d 172.16.3.28 -p tcp --dport 443 -j ACCEPT
+
+# Internet (HTTP/HTTPS)
+iptables -A FORWARD -s 172.16.22.0/26 -o eth1 -p tcp --dport 80 -j ACCEPT
+iptables -A FORWARD -s 172.16.22.0/26 -o eth1 -p tcp --dport 443 -j ACCEPT
+
