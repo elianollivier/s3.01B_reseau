@@ -32,6 +32,9 @@ iptables -A FORWARD -s 172.16.3.28 -p tcp --sport 443 -j ACCEPT
 iptables -A FORWARD -s 172.16.3.28 -d 172.16.21.3 -p tcp --dport 3306 -j ACCEPT
 iptables -A FORWARD -d 172.16.3.28 -s 172.16.21.3 -p tcp --sport 3306 -j ACCEPT
 
+# Pour avoir accès au save de AUX
+iptables -A FORWARD -s 172.16.3.28/28 -d 172.16.21.4 -p tcp --dport 22 -j ACCEPT
+
 # Application patients/RDV sur S port 1224/TCP accessible au personnel soignant (172.16.24.0/22), compta (172.16.20.0/24), DSI (172.16.21.0/24)
 iptables -A FORWARD -s 172.16.24.0/22 -d 172.16.3.28 -p tcp --dport 1224 -j ACCEPT
 iptables -A FORWARD -s 172.16.20.0/24 -d 172.16.3.28 -p tcp --dport 1224 -j ACCEPT

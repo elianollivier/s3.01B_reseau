@@ -1,0 +1,5 @@
+ip a add 172.16.4.2/22 dev eth0
+ip link set dev eth0 up
+ip r add default via 172.16.4.1
+echo "nameserver 172.16.3.29" > /etc/resolv.conf
+
