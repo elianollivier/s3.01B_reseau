@@ -2,9 +2,9 @@ ip link set dev eth0 up
 ip addr add 172.16.3.17/28 dev eth0
 
 ip link set dev eth1 up
-ip addr add 10.0.0.9/24 dev eth1
+ip addr add 10.0.10.2/24 dev eth1
 
-ip route add default via 10.0.0.1
+ip route add default via 10.0.10.254
 
 iptables -P INPUT DROP
 iptables -P FORWARD DROP
@@ -43,3 +43,6 @@ iptables -A FORWARD -s 172.16.21.0/24 -d 172.16.3.28 -p tcp --dport 1224 -j ACCE
 # Internet (HTTP/HTTPS)
 iptables -A FORWARD -s 172.16.3.16/24 -o eth1 -p tcp --dport 80 -j ACCEPT
 iptables -A FORWARD -s 172.16.3.16/24 -o eth1 -p tcp --dport 443 -j ACCEPT
+
+#Faire passer l'accès ssh
+iptables -A FORWARD -p tcp --dport 22 -s 172.16.21.0/24 -j ACCEPT

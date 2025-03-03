@@ -1,0 +1,31 @@
+ip link set dev eth0 up
+ip addr add 10.0.10.254/24 dev eth0
+
+ip link set dev eth1 up
+ip addr add 10.0.100.1/24 dev eth1
+
+#pour revenir dans son propre réseau
+ip route add 172.16.21.0/24 via 10.0.10.1
+ip route add 172.16.3.16/28 via 10.0.10.2
+ip route add 172.16.24.0/22 via 10.0.10.3
+ip route add 172.16.20.0/24 via 10.0.10.4
+
+
+pour connaitre redu:
+ip route add 172.16.4.0/22 via 10.0.100.2
+ip route add 172.16.8.0/22 via 10.0.100.2
+ip route add 172.16.12.0/22 via 10.0.100.2
+ip route add 172.16.16.0/22 via 10.0.100.2
+
+pour connaitre rlow:
+ip route add 192.168.0.0/24 via 10.0.100.3
+ip route add 172.16.22.0/26 via 10.0.100.3
+
+iptables -P INPUT ACCEPT
+iptables -P FORWARD ACCEPT
+iptables -P OUTPUT ACCEPT
+
+iptables -t nat -A POSTROUTING -o eth2 -j MASQUERADE
+
+echo "nameserver 8.8.8.8" > /etc/resolv.conf
+

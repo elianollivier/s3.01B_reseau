@@ -17,3 +17,6 @@ iptables -A OUTPUT -p udp --sport 53 -j ACCEPT
 iptables -A INPUT -p icmp -j ACCEPT
 iptables -A OUTPUT -p icmp -j ACCEPT
 
+# Autoriser SSH depuis 172.16.21.0/24 vers port 22
+iptables -A INPUT -p tcp --dport 22 -s 172.16.21.0/24 -j ACCEPT
+
