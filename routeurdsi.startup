@@ -70,3 +70,5 @@ iptables -A FORWARD -p tcp --dport 22 -s 172.16.21.0/24 -j ACCEPT
 
 
 
+#Recevoir l'accès SSH
+iptables -A INPUT -p tcp --dport 22 -s 172.16.21.0/24 -j ACCEPT

@@ -34,3 +34,6 @@ iptables -A FORWARD -s 172.16.4.0/24 -p icmp --icmp-type echo-reply -j ACCEPT
 
 #Faire passer l'accès ssh
 iptables -A INPUT -p tcp --dport 22 -s 172.16.21.0/24 -j ACCEPT
+
+#Recevoir l'accès SSH
+iptables -A INPUT -p tcp --dport 22 -s 172.16.21.0/24 -j ACCEPT

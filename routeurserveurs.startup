@@ -46,3 +46,6 @@ iptables -A FORWARD -s 172.16.3.16/24 -o eth1 -p tcp --dport 443 -j ACCEPT
 
 #Faire passer l'accès ssh
 iptables -A FORWARD -p tcp --dport 22 -s 172.16.21.0/24 -j ACCEPT
+
+#Recevoir l'accès SSH
+iptables -A INPUT -p tcp --dport 22 -s 172.16.21.0/24 -j ACCEPT

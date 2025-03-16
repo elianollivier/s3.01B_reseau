@@ -1,0 +1,36 @@
+ip a add 172.16.21.3/24 dev eth0
+ip link set dev eth0 up
+ip r add default via 172.16.21.254
+echo "nameserver 172.16.3.29" > /etc/resolv.conf
+
+iptables -P INPUT DROP
+iptables -P FORWARD DROP
+iptables -P OUTPUT DROP
+
+iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+# Autoriser les pings sortants pour tester la connectivité
+iptables -A OUTPUT -p icmp -j ACCEPT
+iptables -A INPUT -p icmp -j ACCEPT
+
+# Autoriser les requêtes DNS sortantes vers le DNS interne
+iptables -A OUTPUT -p udp -d 172.16.3.29 --dport 53 -j ACCEPT
+iptables -A INPUT -p udp -s 172.16.3.29 --sport 53 -j ACCEPT
+
+# Autoriser MySQL (3306) uniquement depuis le RSSI, AUX (pour les saves) et le serveur S
+# RSSI
+iptables -A INPUT -s 172.16.21.1 -p tcp --dport 3306 -j ACCEPT
+
+# AUX
+iptables -A INPUT -s 172.16.21.4 -p tcp --dport 3306 -j ACCEPT
+
+# Serveur S
+iptables -A INPUT -s 172.16.3.28 -p tcp --dport 3306 -j ACCEPT
+
+# Autoriser SFTP (port 22) depuis les chercheurs
+iptables -A INPUT -s 172.16.8.0/22 -p tcp --dport 22 -j ACCEPT
+
+# Autoriser SSH depuis 172.16.21.0/24 vers port 22
+iptables -A INPUT -p tcp --dport 22 -s 172.16.21.0/24 -j ACCEPT
+
